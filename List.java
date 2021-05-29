@@ -1,3 +1,8 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,13 +38,18 @@ public class List {
 		}
 	}
 	public void showClient(JTextArea print_Inst, Institution inst) {//**DEFINED** gui
+		print_Inst.append("<< " + inst.name + " >>\n");
 		for(int i = 0; i < inst.client.size() ; i++) {
 			print_Inst.append(inst.client.get(i).name + " " +inst.client.get(i).phone+"\n");
 		}
 	}
 	public void showpListBystatus(JTextArea print_status, int infectionstatus) {
 		//**DEFINED** gui
-		System.out.println(infectionstatus);
+		//System.out.println(infectionstatus);
+		for (int i = 0; i < plist.size(); i++)
+		{
+			
+		}
 		switch(infectionstatus) {
 		case 0:
 			print_status.append("비접촉자는 : "+numberOfStatus[infectionstatus]+"명 입니다.\n");
@@ -60,13 +70,66 @@ public class List {
 		
 	}
 	
+	public static void getVisitedInfo(Person p)
+	{
+		String name = "";
+		String address = "";
+		try{
+	         File file = new File("./src/Visited-" + p.name + "-" + p.phone + ".txt"); // File 이름 필요
+	         FileReader filereader = new FileReader(file);
+	         BufferedReader bufReader = new BufferedReader(filereader);
+	         String line = "";
+	         while((line = bufReader.readLine()) != null){
+	             name = line.split("|")[0];
+	             address = line.split("|")[1];
+	             
+	             p.addTo_vList((Covid.makeInstitutionInfo(name, address)));
+	             //System.out.print(name + " "+ phone + "\n");
+	         }
+	         bufReader.close();
+		 }catch (FileNotFoundException e) {
+	         // TODO: handle exception
+		 }catch(IOException e){
+	         System.out.println(e);
+	     }
+	}
+	
+	public static void getContactorInfo(Person p)
+	{
+		String name = "";
+		String phone = "";
+		int infectionStatus = 0;
+		try{
+	         File file = new File("./src/List/Contactor-" + p.name + "-" + p.phone + ".txt"); // File 이름 필요
+	         FileReader filereader = new FileReader(file);
+	         BufferedReader bufReader = new BufferedReader(filereader);
+	         String line = "";
+	         while((line = bufReader.readLine()) != null){
+	             name = line.split(" ")[0];
+	             phone = line.split(" ")[1];
+	             infectionStatus = Integer.parseInt(line.split(" ")[2]);
+	             
+	             p.addTo_cList((Covid.makePersonInfo(name, phone, infectionStatus)));
+	             //System.out.print(name + " "+ phone + "\n");
+	         }
+	         bufReader.close();
+		 }catch (FileNotFoundException e) {
+	         // TODO: handle exception
+		 }catch(IOException e){
+	         System.out.println(e);
+	     }
+	}
+	
+	
 	public void addTo_pList(Person p, JTextArea show) {
 		if(p.infectionStatus == 3) { //확진자 발생시
 			
-			itemp = updateVisited(p, show); //1번 (확진의심자) 업데이트
-			dtemp = Covid.scanDate(itemp); //**NOT DEFINED**
-			for(int i = 0; i < itemp.size(); i++) {//visited를 검색
-				ctemp = itemp.get(i).client; //visited Institution의 클라이언트 목록을 받아옴
+			//itemp = updateVisited(p, show); //1번 (확진의심자) 업데이트
+			getContactorInfo(p);
+			getVisitedInfo(p);
+			dtemp = Covid.scanDate(p, p.visited); //**NOT DEFINED**
+			for(int i = 0; i < p.visited.size(); i++) {//visited를 검색
+				ctemp = p.visited.get(i).client; //visited Institution의 클라이언트 목록을 받아옴
 				for(int j = 0 ; j < ctemp.size(); j++) {//visited Institution의 클라이언트 목록을 검색
 					if(dtemp.get(i).day == ctemp.get(j).datetime.day && dtemp.get(i).hour < ctemp.get(j).datetime.hour) { //확진자가 이용한 기관과 같은날, 이용한 시간 이후에 방문한사람들
 						Person newp = new Person();
@@ -83,7 +146,7 @@ public class List {
 					}
 				}
 			}
-			ptemp = Covid.scanPeople();//2번 (접촉자) 업데이트
+			ptemp = Covid.scanPeople(p);//2번 (접촉자) 업데이트
 			for(int i = 0; i < ptemp.size(); i++) {
 				if(plist.contains(ptemp.get(i)) && plist.get(plist.indexOf(ptemp.get(i))).infectionStatus < 2) {//기존 목록에 0또는 1로 있다면 삭제 후 새로 추가
 					numberOfStatus[plist.get(plist.indexOf(ptemp.get(i))).infectionStatus]--;

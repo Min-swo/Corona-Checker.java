@@ -22,6 +22,13 @@ public class Person{
 	ArrayList<Institution> visited = new ArrayList<Institution>();
 	ArrayList<Person> contactor = new ArrayList<Person>();
 	
+	public void addTo_vList(Institution i) {
+		visited.add(i);
+	}
+	
+	public void addTo_cList(Person p) {
+		contactor.add(p);
+	}
 	
 	public boolean equals(Object object) { //called by ArrayList.contains @override
 	    boolean equal = false;

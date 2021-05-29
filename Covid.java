@@ -35,7 +35,7 @@ public class Covid {
 	////Panel////
 	JPanel InstitutionPage = new JPanel();
 	JPanel Plist = new JPanel();
-	ImagePanel welcomePanel = new ImagePanel(new ImageIcon("C:/Users/danho/eclipse-workspace/COVID-19/image/wallpaper.jpg").getImage()); //이미지 주소 변경
+	ImagePanel welcomePanel = new ImagePanel(new ImageIcon("src/wallpaper.jpg").getImage()); //이미지 주소 변경
 	/////TextArea///////
 	static JTextArea show_Inst = new JTextArea();
 
@@ -74,22 +74,12 @@ public class Covid {
 		///////////////public void main() 역할//////////
 		List list = new List();
 		getPersonInfo(list);
+		// 접촉자 명단 받고 -> 접촉자 추가
+		// 확진자 명단 받고 -> 확진자 방문 기관 명단 받기
+
 		list.addTo_iList(makeInstitutionInfo("Alchon", "433-119, Yuljeon-dong"));
-		DateTime temptime1 = new DateTime(2021,5,22,10,46);
-		pList_Client client1 = new pList_Client("우세진", "010-9858-9060", 1, temptime1);
-	
-		DateTime temptime2 = new DateTime(2021,5,22,12,33);
-		pList_Client client2 = new pList_Client("고양이", "010-1111-9060", 0, temptime2);
-		
-		DateTime temptime3 = new DateTime(2021,5,22,11,10);
-		pList_Client client3 = new pList_Client("강아지", "010-2222-9060", 0, temptime3);
-		
-		ArrayList<pList_Client> al = new ArrayList<pList_Client>();
-		al.add(client1);
-		al.add(client2);
-		al.add(client3);
-	
-		Institution i = new Institution("본찌돈까스", " 수원시 장안구 서부로2106번길 22", al);
+		list.addTo_iList(makeInstitutionInfo("Bonjji", "22, Seobu-ro 2106beon-gil"));
+
 		////////////////////////TextArea///////////////////////////
 		JTextArea print_PList = new JTextArea();
 		
@@ -185,7 +175,11 @@ public class Covid {
 							list.showInstitution(show_Inst);
 							break;
 						case "Client":
-							list.showClient(show_Inst, i);
+							for (int i = 0; i < list.ilist.size(); i++)
+							{
+								Institution ins =list.ilist.get(i);
+								list.showClient(show_Inst, ins);
+							}
 						}
 					}
 					
@@ -354,7 +348,7 @@ public class Covid {
 		String phone = "";
 		int infectionStatus = 0;
 		try{
-	         File file = new File("./src/sample.txt"); // File 이름 필요
+	         File file = new File("./src/List/Infected.txt"); // File 이름 필요
 	         FileReader filereader = new FileReader(file);
 	         BufferedReader bufReader = new BufferedReader(filereader);
 	         String line = "";
@@ -363,7 +357,7 @@ public class Covid {
 	             phone = line.split(" ")[1];
 	             infectionStatus = Integer.parseInt(line.split(" ")[2]);
 	             list.addTo_pList(makePersonInfo(name, phone, infectionStatus), show_Inst);
-	             System.out.print(name + " "+ phone + "\n");
+	             //System.out.print(name + " "+ phone + "\n");
 	         }
 	         bufReader.close();
 		 }catch (FileNotFoundException e) {
@@ -387,7 +381,7 @@ public class Covid {
 		String Date = new String();
 		int year; int month; int  day; int hour; int minute;
 		try{
-	         File file = new File("./src/" + name + ".txt");
+	         File file = new File("./src/List/" + name + ".txt");
 	         FileReader filereader = new FileReader(file);
 	         BufferedReader bufReader = new BufferedReader(filereader);
 	         String line = "";
@@ -418,19 +412,51 @@ public class Covid {
 		return i;
 	}
 	
-	public static ArrayList<DateTime> scanDate(ArrayList<Institution> visited) {////**NOT DEFINED** gui 확진자가 이용한 기관의 날짜를 입력받고 넘겨주는 메소드 
+	public static ArrayList<DateTime> scanDate(Person p, ArrayList<Institution> visited) {////**NOT DEFINED** gui 확진자가 이용한 기관의 날짜를 입력받고 넘겨주는 메소드 
 		ArrayList<DateTime> dtemp = new ArrayList<DateTime>();
-		DateTime temptime1 = new DateTime(2021,5,22,10,46);
-		dtemp.add(temptime1);
+		DateTime temptime1 = new DateTime(0, 0, 0, 0, 0);
+		for (int i = 0; i < visited.size(); i++)
+		{
+			Institution iTmp = visited.get(i);
+			for (int j = 0; j < iTmp.client.size(); i++)
+			{
+				
+				if (iTmp.client.get(i).name == p.name && iTmp.client.get(i).phone == p.phone)
+				{
+					temptime1 =iTmp.client.get(i).datetime;
+					dtemp.add(temptime1);
+				}
+			}
+			
+		}
 		return dtemp;
 	}
 
-	public static ArrayList<Person> scanPeople() {//**NOT DEFINED** 확진자가 접촉한 사람의 명단을 입력받고 넘겨주는 메소드
+	public static ArrayList<Person> scanPeople(Person p) {//**NOT DEFINED** 확진자가 접촉한 사람의 명단을 입력받고 넘겨주는 메소드
 		
-		ArrayList<Person> ptemp = new ArrayList<Person>();
-		ptemp.add(makePersonInfo("우세진", "010-9858-9060", 2));
-		ptemp.add(makePersonInfo("강형욱", "010-9999-9999", 2));
-		return ptemp;
+		String name = "";
+		String phone = "";
+		int infectionStatus = 0;
+		try{
+	         File file = new File("./src/List/Contactor-" + p.name + "-" + p.phone + ".txt"); // File 이름 필요
+	         FileReader filereader = new FileReader(file);
+	         BufferedReader bufReader = new BufferedReader(filereader);
+	         String line = "";
+	         while((line = bufReader.readLine()) != null){
+	             name = line.split(" ")[0];
+	             phone = line.split(" ")[1];
+	             infectionStatus = Integer.parseInt(line.split(" ")[2]);
+	             
+	             p.addTo_cList((Covid.makePersonInfo(name, phone, infectionStatus)));
+	             //System.out.print(name + " "+ phone + "\n");
+	         }
+	         bufReader.close();
+		 }catch (FileNotFoundException e) {
+	         // TODO: handle exception
+		 }catch(IOException e){
+	         System.out.println(e);
+	     }
+		return p.contactor;
 	}
 }
 

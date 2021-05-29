@@ -14,8 +14,8 @@ public class Main {
 		getPersonInfo(list);
 		list.addTo_iList(makeInstitutionInfo("Alchon", "433-119, Yuljeon-dong"));
 		
-		list.showpList();
-		list.showInstitution();
+		//list.showpList();
+		//list.showInstitution();
 
 		
 		//Scanner sc = new Scanner(System.in);
@@ -57,7 +57,7 @@ public class Main {
 	             name = line.split(" ")[0];
 	             phone = line.split(" ")[1];
 	             infectionStatus = Integer.parseInt(line.split(" ")[2]);
-	             list.addTo_pList(makePersonInfo(name, phone, infectionStatus));
+	             //list.addTo_pList(makePersonInfo(name, phone, infectionStatus));
 	             //System.out.print(name + " "+ phone + "\n");
 	         }
 	         bufReader.close();
