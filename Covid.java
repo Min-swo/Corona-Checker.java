@@ -82,9 +82,6 @@ public class Covid {
 		list.addTo_iList(makeInstitutionInfo("Bonjji", "22, Seobu-ro 2106beon-gil"));
 		
 		getPersonInfo(list);
-		// 접촉자 명단 받고 -> 접촉자 추가
-		// 확진자 명단 받고 -> 확진자 방문 기관 명단 받기
-
 		
 		JTextArea instution_panel_textArea = new JTextArea();
 		
@@ -548,10 +545,10 @@ public class Covid {
 			Institution iTmp = visited.get(i);
 			for (int j = 0; j < iTmp.client.size(); j++)
 			{
-				System.out.println(iTmp.client.get(j).name);
-				System.out.println(iTmp.client.get(j).phone);
-				System.out.println(p.name);
-				System.out.println(p.phone);
+				//System.out.println(iTmp.client.get(j).name);
+				//System.out.println(iTmp.client.get(j).phone);
+				//System.out.println(p.name);
+				//System.out.println(p.phone);
 				if ((p.name).equals(iTmp.client.get(j).name) && p.phone.equals(iTmp.client.get(j).phone) )
 				{
 					temptime1 =iTmp.client.get(j).datetime;

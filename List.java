@@ -149,7 +149,7 @@ public class List {
 			
 			//itemp = updateVisited(p, show); //1번 (확진의심자) 업데이트
 			
-			getContactorInfo(p);
+			//getContactorInfo(p);
 			getVisitedInfo(p);
 			dtemp = Covid.scanDate(p, p.visited);
 			for(int i = 0; i < p.visited.size(); i++) {//visited를 검색
