@@ -1,1 +1,2 @@
-# JPL_TERM_PROJECT
+# Project Name: Corona Checker
+##
