@@ -37,7 +37,8 @@ public class Covid {
 	////Panel////
 	JPanel InstitutionPage = new JPanel();
 	JPanel Plist = new JPanel();
-	JPanel Searching_Ins_Panel = new JPanel();
+	//JPanel Searching_Ins_Panel = new JPanel();
+	
 	ImagePanel welcomePanel = new ImagePanel(new ImageIcon("src/wallpaper.jpg").getImage()); //이미지 주소 변경
 	/////TextArea///////
 	static JTextArea show_Inst = new JTextArea();
@@ -97,13 +98,17 @@ public class Covid {
 		
 		
 		////////////////button//////////////////////////
-		JButton inputInstitution = new JButton("\uAE30\uAD00\uAC80\uC0C9");
+		//JButton inputInstitution = new JButton("\uAE30\uAD00\uAC80\uC0C9");
 		JButton institution_panel_search = new JButton("search");
 		JButton plist_1 = new JButton("search");
 		JButton showIns_1 = new JButton("\uCD9C\uB825");
 		JButton inst_search_1 = new JButton("institution");
 		JButton backToIns = new JButton("Back");
 		String[] status= {"Coronic","Contactor", "Suspected", "Untactor", "All"};
+		JButton update=new JButton("update");
+		
+		
+		
 		
 				////////////////////////TextArea///////////////////////////
 				JTextArea print_PList = new JTextArea();
@@ -213,43 +218,33 @@ public class Covid {
 		
 		
 		
-		
-		Searching_Ins_Panel.setBounds(0, 0, 633, 453);
-		frame.getContentPane().add(Searching_Ins_Panel);
-		Searching_Ins_Panel.setLayout(null);
+
 		
 		
 		
 		
 		backToIns.setBounds(506, 392, 97, 23);
-		Searching_Ins_Panel.add(backToIns);
+
 		
 		JLabel lblNewLabel_3 = new JLabel("\uAE30\uAD00\uBA85: ");
 		lblNewLabel_3.setFont(new Font("바탕", Font.BOLD, 16));
 		lblNewLabel_3.setBounds(35, 57, 60, 29);
-		Searching_Ins_Panel.add(lblNewLabel_3);
-		
-		textField = new JTextField();
-		textField.setBounds(95, 58, 210, 29);
-		Searching_Ins_Panel.add(textField);
-		textField.setColumns(10);
+
 		
 		
 		
-		institution_panel_search.setBounds(317, 61, 97, 23);
-		Searching_Ins_Panel.add(institution_panel_search);
 		
 		JLabel lblNewLabel_4 = new JLabel("\uAE30\uAD00\uAC80\uC0C9");
 		lblNewLabel_4.setFont(new Font("굴림체", Font.BOLD, 20));
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_4.setBounds(148, 10, 322, 38);
-		Searching_Ins_Panel.add(lblNewLabel_4);
+
 		
 		
 		
 		JScrollPane scrollPane_1 = new JScrollPane(instution_panel_textArea,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane_1.setBounds(35, 96, 397, 319);
-		Searching_Ins_Panel.add(scrollPane_1);
+
 		
 		
 		
@@ -299,9 +294,9 @@ public class Covid {
 				
 		
 		InstitutionPage.setVisible(false);
-			
-			
+		
 
+		welcomePanel.add(update);
 			
 			
 			
@@ -324,41 +319,19 @@ public class Covid {
 				}
 			}
 		});
-		
-		
-		institution_panel_search.addActionListener(new ActionListener() {
+		update.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
-				JButton institution_panel_search=(JButton) e.getSource();
-				if(institution_panel_search.getText().equals("search")) {
-					//updateVisited(p, textField , instution_panel_textArea);
+				JButton update=(JButton) e.getSource();
+				if(update.getText().equals("update")) {
+					
+					getPersonInfo(list);
+										
 					
 				}
 			}
 		});
-		
-		
-		
-		backToIns.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JButton backToIns=(JButton) e.getSource();
-				if(backToIns.getText().equals("Back")) {
-					Searching_Ins_Panel.setVisible(false);
-					InstitutionPage.setVisible(true);
-				}
-			}
-		});
-		
-		 inputInstitution.addActionListener(new ActionListener() {
-		 	public void actionPerformed(ActionEvent e) {
-		 		JButton inputInstitution=(JButton) e.getSource();
-		 		if(inputInstitution.getText().equals("\uAE30\uAD00\uAC80\uC0C9")) {
+	
 
-		 			show_Inst.setText("");
-		 			InstitutionPage.setVisible(false);
-		 			Searching_Ins_Panel.setVisible(true);
-		 		}
-		 	}
-	 	});
 		 	
 						
 			showIns_1.addActionListener(new ActionListener() {
@@ -433,9 +406,8 @@ public class Covid {
 		
 		
 		///////////////////////////기타///////////////////////////////////
-		Searching_Ins_Panel.setVisible(false);
-		inputInstitution.setBounds(415, 370, 97, 23);
-		InstitutionPage.add(inputInstitution);
+
+
 		
 
 		
@@ -461,6 +433,8 @@ public class Covid {
 		welcomePanel.add(inst_search_1);
 		instution_panel_textArea.setEditable(false);
 		
+		update.setBounds(263, 346, 107, 23);
+		update.setFont(new Font("Segoe UI Black", Font.BOLD, 12));
 		
 	}
 	
