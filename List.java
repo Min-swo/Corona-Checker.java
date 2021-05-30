@@ -1,3 +1,4 @@
+package Covid;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +10,7 @@ import java.util.Scanner;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class List {
 	List(){
@@ -28,7 +30,23 @@ public class List {
 	public void showpList(JTextArea print_PList) {//** DEFINED** gui를 통해 출력해주세요
 		
 		for(int i = 0; i < plist.size() ; i++) {
-			print_PList.append((i+1) + ". " + plist.get(i).name + " " +plist.get(i).phone + " " + plist.get(i).infectionStatus+"\n");
+			
+			//print_PList.append((i+1) + ". " + plist.get(i).name + " " +plist.get(i).phone + " " + plist.get(i).infectionStatus+"\n");
+			print_PList.append((i+1) + ". " + plist.get(i).name + " " +plist.get(i).phone + " ");
+			switch(plist.get(i).infectionStatus) {
+			case 0:
+				print_PList.append("비접촉자\n");
+				break;
+			case 1:
+				print_PList.append("의심환자\n");
+				break;
+			case 2:
+				print_PList.append("접촉자\n");
+				break;
+			case 3:
+				print_PList.append("확진자\n");
+				break;
+			}
 			
 		}
 	}
@@ -42,6 +60,11 @@ public class List {
 		for(int i = 0; i < inst.client.size() ; i++) {
 			print_Inst.append(inst.client.get(i).name + " " +inst.client.get(i).phone+"\n");
 		}
+		
+		
+		
+		
+		
 	}
 	public void showpListBystatus(JTextArea print_status, int infectionstatus) {
 		//**DEFINED** gui
@@ -125,6 +148,7 @@ public class List {
 		if(p.infectionStatus == 3) { //확진자 발생시
 			
 			//itemp = updateVisited(p, show); //1번 (확진의심자) 업데이트
+			
 			getContactorInfo(p);
 			getVisitedInfo(p);
 			dtemp = Covid.scanDate(p, p.visited); //**NOT DEFINED**
@@ -178,11 +202,11 @@ public class List {
 		ilist.add(i);
 	}
 	
-	public ArrayList<Institution> updateVisited(Person p, JTextArea show) { //확진자가 방문한 기관의 리스트를 확진자 객체의 visited에 저장하는 메소드입니다. **NOT DEFINED**
+	public ArrayList<Institution> updateVisited(Person p, JTextField print ,JTextArea show) { //확진자가 방문한 기관의 리스트를 확진자 객체의 visited에 저장하는 메소드입니다. **NOT DEFINED**
 		//Scanner sc = new Scanner(System.in); //gui를 통한 입력으로 변경해주세요
 		
-		String input=show.getText();
-		
+		String input=print.getText();
+		print.setText("");
 		
 		Institution temp;
 		ArrayList<Institution> searched = new ArrayList<Institution>(); //검색된 기관의 목록을 저장 (같은 이름의 기관이 검색될 경우를 대비)
