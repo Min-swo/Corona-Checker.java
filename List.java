@@ -1,4 +1,4 @@
-package Covid;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -98,13 +98,13 @@ public class List {
 		String name = "";
 		String address = "";
 		try{
-	         File file = new File("./src/Visited-" + p.name + "-" + p.phone + ".txt"); // File 이름 필요
+	         File file = new File("./src/List/Visited-" + p.name + "-" + p.phone + ".txt");
 	         FileReader filereader = new FileReader(file);
 	         BufferedReader bufReader = new BufferedReader(filereader);
 	         String line = "";
 	         while((line = bufReader.readLine()) != null){
-	             name = line.split("|")[0];
-	             address = line.split("|")[1];
+	             name = line.split("/")[0];
+	             address = line.split("/")[1];
 	             
 	             p.addTo_vList((Covid.makeInstitutionInfo(name, address)));
 	             //System.out.print(name + " "+ phone + "\n");
@@ -151,11 +151,11 @@ public class List {
 			
 			getContactorInfo(p);
 			getVisitedInfo(p);
-			dtemp = Covid.scanDate(p, p.visited); //**NOT DEFINED**
+			dtemp = Covid.scanDate(p, p.visited);
 			for(int i = 0; i < p.visited.size(); i++) {//visited를 검색
 				ctemp = p.visited.get(i).client; //visited Institution의 클라이언트 목록을 받아옴
 				for(int j = 0 ; j < ctemp.size(); j++) {//visited Institution의 클라이언트 목록을 검색
-					if(dtemp.get(i).day == ctemp.get(j).datetime.day && dtemp.get(i).hour < ctemp.get(j).datetime.hour) { //확진자가 이용한 기관과 같은날, 이용한 시간 이후에 방문한사람들
+					if(dtemp.get(i).day == ctemp.get(j).datetime.day && dtemp.get(i).hour <= ctemp.get(j).datetime.hour) { //확진자가 이용한 기관과 같은날, 이용한 시간 이후에 방문한사람들
 						Person newp = new Person();
 						ctemp.get(j).infectionStatus = 1; //의심자로 지정
 						newp.clientToList(ctemp.get(j));
@@ -201,7 +201,7 @@ public class List {
 	public void addTo_iList(Institution i) {
 		ilist.add(i);
 	}
-	
+	/*
 	public ArrayList<Institution> updateVisited(Person p, JTextField print ,JTextArea show) { //확진자가 방문한 기관의 리스트를 확진자 객체의 visited에 저장하는 메소드입니다. **NOT DEFINED**
 		//Scanner sc = new Scanner(System.in); //gui를 통한 입력으로 변경해주세요
 		
@@ -237,7 +237,7 @@ public class List {
 		
 		return p.visited;
 	}
-	
+	*/
 	public void quitIsolation(Person p) {//격리 해제시 호출하는 메소드
 		numberOfStatus[3]--;
 		Person temp = new Person(p.name, p.phone, 0);

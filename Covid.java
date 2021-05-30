@@ -1,5 +1,3 @@
-package Covid;
-
 import java.awt.Dimension;
 import java.awt.EventQueue;
 
@@ -79,12 +77,15 @@ public class Covid {
 	private void initialize() {
 		///////////////public void main() 역할//////////
 		List list = new List();
+		
+		list.addTo_iList(makeInstitutionInfo("Alchon", "433-119, Yuljeon-dong"));
+		list.addTo_iList(makeInstitutionInfo("Bonjji", "22, Seobu-ro 2106beon-gil"));
+		
 		getPersonInfo(list);
 		// 접촉자 명단 받고 -> 접촉자 추가
 		// 확진자 명단 받고 -> 확진자 방문 기관 명단 받기
 
-		list.addTo_iList(makeInstitutionInfo("Alchon", "433-119, Yuljeon-dong"));
-		list.addTo_iList(makeInstitutionInfo("Bonjji", "22, Seobu-ro 2106beon-gil"));
+		
 		JTextArea instution_panel_textArea = new JTextArea();
 		
 		////////////////////////
@@ -545,12 +546,15 @@ public class Covid {
 		for (int i = 0; i < visited.size(); i++)
 		{
 			Institution iTmp = visited.get(i);
-			for (int j = 0; j < iTmp.client.size(); i++)
+			for (int j = 0; j < iTmp.client.size(); j++)
 			{
-				
-				if (iTmp.client.get(i).name == p.name && iTmp.client.get(i).phone == p.phone)
+				System.out.println(iTmp.client.get(j).name);
+				System.out.println(iTmp.client.get(j).phone);
+				System.out.println(p.name);
+				System.out.println(p.phone);
+				if ((p.name).equals(iTmp.client.get(j).name) && p.phone.equals(iTmp.client.get(j).phone) )
 				{
-					temptime1 =iTmp.client.get(i).datetime;
+					temptime1 =iTmp.client.get(j).datetime;
 					dtemp.add(temptime1);
 				}
 			}
